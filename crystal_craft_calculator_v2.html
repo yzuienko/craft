@@ -1,0 +1,246 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.wrap{padding:1rem 0;font-family:var(--font-sans)}
+h1{font-size:18px;font-weight:500;color:var(--color-text-primary);margin-bottom:1.5rem}
+.settings{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:1.5rem}
+.setting-card{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px 16px}
+.setting-label{font-size:13px;color:var(--color-text-secondary);margin-bottom:8px}
+.toggle-row{display:flex;gap:8px}
+.toggle-btn{flex:1;padding:6px;font-size:13px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);background:transparent;color:var(--color-text-secondary);cursor:pointer;transition:all .15s}
+.toggle-btn.active{background:var(--color-background-info);color:var(--color-text-info);border-color:var(--color-border-info)}
+.check-row{display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px;color:var(--color-text-primary)}
+.check-row input{width:15px;height:15px;cursor:pointer}
+.crafts-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:16px}
+.craft-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1.25rem;transition:border-color .2s}
+.craft-card.best{border:2px solid #1D9E75}
+.craft-name{font-size:15px;font-weight:500;color:var(--color-text-primary);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.best-badge{font-size:11px;background:#E1F5EE;color:#0F6E56;padding:2px 8px;border-radius:var(--border-radius-md)}
+.res-row{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.res-dot{width:14px;height:14px;border-radius:3px;flex-shrink:0}
+.dot-blue{background:#378ADD}
+.dot-green{background:#639922}
+.dot-gray{background:#888780}
+.res-label{font-size:13px;color:var(--color-text-secondary);width:100px;flex-shrink:0}
+.res-label span{font-size:11px;color:var(--color-text-tertiary)}
+.res-row input{width:90px;font-size:13px}
+.divider{border:none;border-top:0.5px solid var(--color-border-tertiary);margin:12px 0}
+.costs-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:8px}
+.cost-box{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:7px 8px}
+.cost-lbl{font-size:10px;color:var(--color-text-tertiary);margin-bottom:2px}
+.cost-val{font-size:12px;font-weight:500;color:var(--color-text-primary)}
+.profit-section{margin-top:8px}
+.profit-title{font-size:11px;color:var(--color-text-secondary);margin-bottom:6px;text-transform:uppercase;letter-spacing:.04em}
+.profit-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
+.profit-box{border-radius:var(--border-radius-md);padding:8px 10px;border:0.5px solid var(--color-border-tertiary)}
+.profit-lbl{font-size:10px;color:var(--color-text-secondary);margin-bottom:3px}
+.profit-val{font-size:13px;font-weight:500}
+.profit-val.pos{color:var(--color-text-success)}
+.profit-val.neg{color:var(--color-text-danger)}
+</style>
+<div class="wrap">
+  <h1>Калькулятор крафта кристаллов</h1>
+  <div class="settings">
+    <div class="setting-card">
+      <div class="setting-label">Тип крафта</div>
+      <div class="toggle-row">
+        <button class="toggle-btn active" id="btn-t45" onclick="setType('t45')">Т4.5 — огромный</button>
+        <button class="toggle-btn" id="btn-t4" onclick="setType('t4')">Т4 — судьбы</button>
+      </div>
+    </div>
+    <div class="setting-card">
+      <div class="setting-label">Режим крафтов</div>
+      <label class="check-row">
+        <input type="checkbox" id="premium" onchange="recalc()">
+        Премиум Нинав (40 крафтов вместо 30)
+      </label>
+    </div>
+    <div class="setting-card">
+      <div class="setting-label">Цена продажи 1 кристалла (золото)</div>
+      <input type="number" id="crystal-price" value="100" min="0" oninput="recalc()" style="width:120px;font-size:14px">
+    </div>
+    <div class="setting-card">
+      <div class="setting-label">Перк (всегда активен)</div>
+      <div style="font-size:13px;color:var(--color-text-success)">✓ Идеальный результат: +15% кристаллов</div>
+      <div style="font-size:13px;color:var(--color-text-secondary);margin-top:4px">✓ Комиссия торговли: −5%</div>
+    </div>
+  </div>
+  <div class="crafts-grid" id="crafts-grid"></div>
+</div>
+<script>
+// Конфиг ремёсел
+const CRAFTS = [
+  {id:'hunt',name:'Охота'},
+  {id:'fish',name:'Рыбалка'},
+  {id:'arch',name:'Археология'},
+  {id:'herb',name:'Травничество'},
+  {id:'wood',name:'Лесозаготовка'},
+  {id:'mine',name:'Горное дело'},
+];
+
+// Конфиг типов кристаллов
+// Ресурсы указаны на 10 кристаллов (1 крафт)
+const CRYSTAL_TYPES = {
+  t45:{blue:43,green:59,white:112,craftCost:468},
+  t4: {blue:33,green:45,white:86, craftCost:468},
+};
+
+// Количество крафтов (каждый крафт = 10 кристаллов)
+const CRAFTS_COUNT = {normal:30, premium:40};
+
+let currentType = 't45';
+const prices = {};
+CRAFTS.forEach(c=>{prices[c.id]={blue:500,green:300,white:150}});
+
+function fmt(n){return Math.round(n).toLocaleString('ru-RU')}
+function fmtSign(n){return (n>=0?'+':'')+fmt(n)}
+
+function calcCraft(craftId){
+  const p = prices[craftId];
+  const ct = CRYSTAL_TYPES[currentType];
+  const crystalSellPrice = parseFloat(document.getElementById('crystal-price').value)||0;
+  const premium = document.getElementById('premium').checked;
+  const totalCrafts = premium ? CRAFTS_COUNT.premium : CRAFTS_COUNT.normal; // 30 или 40
+
+  // Цена ресурса за 1 шт (вводят за 100)
+  const pb = p.blue/100, pg = p.green/100, pw = p.white/100;
+
+  // Стоимость ресурсов за 1 крафт (на 10 кристаллов)
+  const resCostPer10 = ct.blue*pb + ct.green*pg + ct.white*pw;
+
+  // Стоимость ресурсов за всё количество крафтов
+  const resTotalCost = resCostPer10 * totalCrafts;
+
+  // Стоимость самого крафта: 468 × количество_крафтов
+  const craftFeeCost = ct.craftCost * totalCrafts; // напр. 468×30=14040 или 468×40=18720
+
+  // Общие затраты
+  const totalCost = resTotalCost + craftFeeCost;
+
+  // Количество кристаллов: 10 шт за крафт × количество крафтов × 1.15 (перк)
+  const totalCrystals = 10 * totalCrafts * 1.15;
+
+  // Доход до комиссии
+  const revenue = crystalSellPrice * totalCrystals;
+
+  // Чистая прибыль: доход × 0.95 (−5% комиссия) − затраты
+  const profitTotal = revenue * 0.95 - totalCost;
+
+  // Прибыль за 1 кристалл
+  // затраты на 1 кристалл = totalCost / totalCrystals
+  // доход от 1 кристалла = crystalSellPrice * 0.95
+  const profitPer1 = crystalSellPrice * 0.95 - (totalCost / totalCrystals);
+
+  // Прибыль за 30 крафтов (нормал)
+  const crafts30 = CRAFTS_COUNT.normal;
+  const resCost30 = resCostPer10 * crafts30;
+  const craftFee30 = ct.craftCost * crafts30;
+  const crystals30 = 10 * crafts30 * 1.15;
+  const profit30 = crystals30 * crystalSellPrice * 0.95 - (resCost30 + craftFee30);
+
+  // Прибыль за 40 крафтов (премиум)
+  const crafts40 = CRAFTS_COUNT.premium;
+  const resCost40 = resCostPer10 * crafts40;
+  const craftFee40 = ct.craftCost * crafts40;
+  const crystals40 = 10 * crafts40 * 1.15;
+  const profit40 = crystals40 * crystalSellPrice * 0.95 - (resCost40 + craftFee40);
+
+  return {
+    resTotalCost, craftFeeCost, totalCost,
+    totalCrystals, revenue, profitTotal,
+    profitPer1, profit30, profit40
+  };
+}
+
+function setType(t){
+  currentType = t;
+  document.getElementById('btn-t45').classList.toggle('active',t==='t45');
+  document.getElementById('btn-t4').classList.toggle('active',t==='t4');
+  recalc();
+}
+
+function setPrice(id,color,val){
+  prices[id][color]=parseFloat(val)||0;
+  recalc();
+}
+
+function buildUI(){
+  const grid = document.getElementById('crafts-grid');
+  grid.innerHTML='';
+  CRAFTS.forEach(c=>{
+    const div=document.createElement('div');
+    div.className='craft-card';
+    div.id='card-'+c.id;
+    div.innerHTML=`
+      <div class="craft-name" id="name-${c.id}">${c.name}</div>
+      <div class="res-row">
+        <div class="res-dot dot-blue"></div>
+        <span class="res-label">Синий <span>(за 100)</span></span>
+        <input type="number" id="p-${c.id}-blue" value="${prices[c.id].blue}" min="0" oninput="setPrice('${c.id}','blue',this.value)">
+      </div>
+      <div class="res-row">
+        <div class="res-dot dot-green"></div>
+        <span class="res-label">Зелёный <span>(за 100)</span></span>
+        <input type="number" id="p-${c.id}-green" value="${prices[c.id].green}" min="0" oninput="setPrice('${c.id}','green',this.value)">
+      </div>
+      <div class="res-row">
+        <div class="res-dot dot-gray"></div>
+        <span class="res-label">Белый <span>(за 100)</span></span>
+        <input type="number" id="p-${c.id}-white" value="${prices[c.id].white}" min="0" oninput="setPrice('${c.id}','white',this.value)">
+      </div>
+      <hr class="divider">
+      <div id="stats-${c.id}"></div>
+    `;
+    grid.appendChild(div);
+  });
+  recalc();
+}
+
+function recalc(){
+  const results=CRAFTS.map(c=>({id:c.id,...calcCraft(c.id)}));
+  const maxProfit=Math.max(...results.map(r=>r.profitTotal));
+
+  results.forEach(r=>{
+    const isBest=r.profitTotal===maxProfit;
+    const card=document.getElementById('card-'+r.id);
+    card.className='craft-card'+(isBest?' best':'');
+    const craft=CRAFTS.find(c=>c.id===r.id);
+    document.getElementById('name-'+r.id).innerHTML=
+      craft.name+(isBest?' <span class="best-badge">лучший</span>':'');
+
+    const premium=document.getElementById('premium').checked;
+    const totalCrafts=premium?40:30;
+    const pc=r.profitPer1, p30=r.profit30, p40=r.profit40;
+
+    document.getElementById('stats-'+r.id).innerHTML=`
+      <div class="costs-row">
+        <div class="cost-box"><div class="cost-lbl">Ресурсы</div><div class="cost-val">${fmt(r.resTotalCost)} зол.</div></div>
+        <div class="cost-box"><div class="cost-lbl">Крафт (${totalCrafts}×468)</div><div class="cost-val">${fmt(r.craftFeeCost)} зол.</div></div>
+        <div class="cost-box"><div class="cost-lbl">Итого затрат</div><div class="cost-val">${fmt(r.totalCost)} зол.</div></div>
+      </div>
+      <div class="cost-box" style="margin-bottom:8px">
+        <div class="cost-lbl">Кристаллов получено (×1.15 перк): ${r.totalCrystals.toFixed(1)} шт. → Доход: ${fmt(r.revenue)} зол.</div>
+      </div>
+      <div class="profit-section">
+        <div class="profit-title">Чистая прибыль (−5% комиссия)</div>
+        <div class="profit-grid">
+          <div class="profit-box">
+            <div class="profit-lbl">За 1 кристалл</div>
+            <div class="profit-val ${pc>=0?'pos':'neg'}">${fmtSign(pc)} зол.</div>
+          </div>
+          <div class="profit-box">
+            <div class="profit-lbl">За 30 крафтов</div>
+            <div class="profit-val ${p30>=0?'pos':'neg'}">${fmtSign(p30)} зол.</div>
+          </div>
+          <div class="profit-box">
+            <div class="profit-lbl">За 40 крафтов</div>
+            <div class="profit-val ${p40>=0?'pos':'neg'}">${fmtSign(p40)} зол.</div>
+          </div>
+        </div>
+      </div>
+    `;
+  });
+}
+
+buildUI();
+</script>
