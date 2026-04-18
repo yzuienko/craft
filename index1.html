@@ -1,47 +1,72 @@
 
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:var(--font-sans);color:var(--color-text-primary)}
+body{font-family:var(--font-sans)}
 
-.header{display:flex;align-items:baseline;gap:16px;margin-bottom:2rem;padding-bottom:1rem;border-bottom:0.5px solid var(--color-border-tertiary)}
-.header-title{font-size:20px;font-weight:500}
-.header-sub{font-size:13px;color:var(--color-text-tertiary)}
+:root{
+--d-bg:#1a1a18;
+--d-surface:#242422;
+--d-card:#2a2a28;
+--d-hover:#323230;
+--d-border:rgba(255,255,255,0.08);
+--d-border-md:rgba(255,255,255,0.14);
+--d-text:#e8e5de;
+--d-muted:#8a8a85;
+--d-hint:#5a5a56;
+--d-accent:#7F77DD;
+--d-accent-dim:#3C3489;
+--d-accent-bg:rgba(127,119,221,0.12);
+--d-green:#5DCAA5;
+--d-green-bg:rgba(29,158,117,0.12);
+--d-red:#F09595;
+}
 
-.panel{background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:1.25rem;margin-bottom:1.5rem}
+.wrap{padding:1.25rem 0;background:var(--d-bg);min-height:100vh}
+
+.header{display:flex;align-items:baseline;gap:16px;margin-bottom:2rem;padding-bottom:1rem;border-bottom:0.5px solid var(--d-border)}
+.header-title{font-size:20px;font-weight:500;color:var(--d-text)}
+.header-sub{font-size:13px;color:var(--d-hint)}
+
+.panel{background:var(--d-surface);border-radius:12px;padding:1.25rem;margin-bottom:1.5rem;border:0.5px solid var(--d-border)}
 .panel-row{display:flex;flex-wrap:wrap;gap:1.5rem;align-items:flex-start}
 
 .control-group{display:flex;flex-direction:column;gap:8px}
-.control-label{font-size:11px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.06em}
+.control-label{font-size:11px;font-weight:500;color:var(--d-hint);text-transform:uppercase;letter-spacing:.06em}
 
-.seg{display:flex;background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);overflow:hidden}
-.seg-btn{padding:7px 16px;font-size:13px;border:none;background:transparent;color:var(--color-text-secondary);cursor:pointer;transition:all .15s;white-space:nowrap}
-.seg-btn.on{background:#534AB7;color:#EEEDFE;font-weight:500}
+.seg{display:flex;background:var(--d-bg);border:0.5px solid var(--d-border);border-radius:8px;overflow:hidden}
+.seg-btn{padding:7px 16px;font-size:13px;border:none;background:transparent;color:var(--d-muted);cursor:pointer;transition:all .15s;white-space:nowrap;font-family:var(--font-sans)}
+.seg-btn.on{background:var(--d-accent-dim);color:#CECBF6;font-weight:500}
+.seg-btn:not(.on):hover{background:var(--d-hover);color:var(--d-text)}
 
-.toggle-wrap{display:flex;align-items:center;gap:10px;cursor:pointer}
-.toggle-track{width:36px;height:20px;border-radius:10px;background:var(--color-border-secondary);transition:background .2s;flex-shrink:0;position:relative}
-.toggle-track.on{background:#534AB7}
+.toggle-wrap{display:flex;align-items:center;gap:10px;cursor:pointer;user-select:none}
+.toggle-track{width:36px;height:20px;border-radius:10px;background:var(--d-border-md);transition:background .2s;flex-shrink:0;position:relative}
+.toggle-track.on{background:var(--d-accent)}
 .toggle-thumb{position:absolute;top:3px;left:3px;width:14px;height:14px;border-radius:50%;background:#fff;transition:left .2s}
 .toggle-track.on .toggle-thumb{left:19px}
-.toggle-label{font-size:13px;color:var(--color-text-primary)}
-.toggle-hint{font-size:12px;color:var(--color-text-tertiary);margin-top:2px}
+.toggle-label{font-size:13px;color:var(--d-text)}
+.toggle-hint{font-size:12px;color:var(--d-hint);margin-top:2px}
 
-.price-input-row{display:flex;align-items:center;gap:8px}
-.price-input-row label{font-size:13px;color:var(--color-text-secondary);white-space:nowrap}
+input[type=number]{background:var(--d-bg);border:0.5px solid var(--d-border);border-radius:8px;padding:7px 10px;font-size:13px;color:var(--d-text);font-family:var(--font-sans);outline:none;transition:border-color .15s}
+input[type=number]:hover{border-color:var(--d-border-md)}
+input[type=number]:focus{border-color:var(--d-accent);box-shadow:0 0 0 2px rgba(127,119,221,0.18)}
 .price-big{width:110px;font-size:15px;font-weight:500}
 
-.perk-pill{display:inline-flex;align-items:center;gap:6px;background:#EAF3DE;border-radius:20px;padding:5px 12px}
-.perk-dot{width:6px;height:6px;border-radius:50%;background:#3B6D11;flex-shrink:0}
-.perk-text{font-size:12px;color:#27500A;font-weight:500}
+.perk-pill{display:inline-flex;align-items:center;gap:6px;border-radius:20px;padding:5px 12px}
+.perk-green{background:var(--d-green-bg)}
+.perk-blue{background:rgba(55,138,221,0.1)}
+.perk-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.perk-text-g{font-size:12px;font-weight:500;color:var(--d-green)}
+.perk-text-b{font-size:12px;font-weight:500;color:#85B7EB}
 
 .crafts-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:14px}
 
-.craft-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1.25rem;transition:border .15s,background .15s}
-.craft-card.best{border:1.5px solid #1D9E75;background:#E1F5EE08}
+.craft-card{background:var(--d-card);border:0.5px solid var(--d-border);border-radius:12px;padding:1.25rem;transition:border .15s}
+.craft-card.best{border:1.5px solid #1D9E75;background:#04342C18}
 
 .card-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem}
-.card-icon{width:32px;height:32px;border-radius:var(--border-radius-md);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
-.card-name{font-size:15px;font-weight:500}
-.best-tag{font-size:11px;font-weight:500;color:#0F6E56;background:#E1F5EE;border-radius:20px;padding:3px 10px}
+.card-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.card-name{font-size:15px;font-weight:500;color:var(--d-text)}
+.best-tag{font-size:11px;font-weight:500;color:#5DCAA5;background:rgba(29,158,117,0.15);border-radius:20px;padding:3px 10px}
 
 .res-inputs{display:flex;flex-direction:column;gap:6px;margin-bottom:1rem}
 .res-line{display:flex;align-items:center;gap:8px}
@@ -50,35 +75,36 @@ body{font-family:var(--font-sans);color:var(--color-text-primary)}
 .sq-b{background:#378ADD}
 .sq-g{background:#639922}
 .sq-w{background:#888780}
-.res-name{font-size:12px;color:var(--color-text-secondary)}
+.res-name{font-size:12px;color:var(--d-muted)}
 .res-line input{flex:1;min-width:0;font-size:13px}
-.res-qty{font-size:11px;color:var(--color-text-tertiary);width:48px;text-align:right;white-space:nowrap}
+.res-qty{font-size:11px;color:var(--d-hint);width:48px;text-align:right;white-space:nowrap}
 
-.divider{height:0.5px;background:var(--color-border-tertiary);margin:1rem 0}
+.divider{height:0.5px;background:var(--d-border);margin:1rem 0}
 
 .costs-mini{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px}
-.mini-box{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:8px 10px}
-.mini-lbl{font-size:10px;color:var(--color-text-tertiary);margin-bottom:2px;text-transform:uppercase;letter-spacing:.04em}
-.mini-val{font-size:12px;font-weight:500;color:var(--color-text-primary)}
+.mini-box{background:var(--d-surface);border-radius:8px;padding:8px 10px;border:0.5px solid var(--d-border)}
+.mini-lbl{font-size:10px;color:var(--d-hint);margin-bottom:2px;text-transform:uppercase;letter-spacing:.04em}
+.mini-val{font-size:12px;font-weight:500;color:var(--d-text)}
 
-.profit-label{font-size:10px;font-weight:500;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
+.profit-label{font-size:10px;font-weight:500;color:var(--d-hint);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
 .profit-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
-.profit-cell{border-radius:var(--border-radius-md);padding:8px 10px;border:0.5px solid var(--color-border-tertiary)}
-.p-head{font-size:10px;color:var(--color-text-tertiary);margin-bottom:3px}
+.profit-cell{border-radius:8px;padding:8px 10px;border:0.5px solid var(--d-border);background:var(--d-surface)}
+.p-head{font-size:10px;color:var(--d-hint);margin-bottom:3px}
 .p-val{font-size:13px;font-weight:500}
-.p-val.pos{color:#0F6E56}
-.p-val.neg{color:var(--color-text-danger)}
-.p-val.pos-hi{color:#0F6E56;font-size:14px}
+.p-val.pos{color:var(--d-green)}
+.p-val.neg{color:var(--d-red)}
+.p-val.pos-hi{color:var(--d-green);font-size:14px}
 
-.craft-icon-hunt{background:#FAEEDA;color:#854F0B}
-.craft-icon-fish{background:#E6F1FB;color:#185FA5}
-.craft-icon-arch{background:#FBEAF0;color:#993556}
-.craft-icon-herb{background:#EAF3DE;color:#3B6D11}
-.craft-icon-wood{background:#FAECE7;color:#993C1D}
-.craft-icon-mine{background:#F1EFE8;color:#5F5E5A}
+.craft-icon-hunt{background:rgba(186,117,23,0.15);color:#EF9F27}
+.craft-icon-fish{background:rgba(55,138,221,0.15);color:#85B7EB}
+.craft-icon-arch{background:rgba(212,83,126,0.15);color:#ED93B1}
+.craft-icon-herb{background:rgba(99,153,34,0.15);color:#97C459}
+.craft-icon-wood{background:rgba(216,90,48,0.15);color:#F0997B}
+.craft-icon-mine{background:rgba(136,135,128,0.15);color:#B4B2A9}
 </style>
 
-<div style="padding:1.25rem 0">
+<div class="wrap">
+<div style="max-width:960px;margin:0 auto;padding:0 1rem">
 
 <div class="header">
   <span class="header-title">Калькулятор крафта</span>
@@ -89,12 +115,11 @@ body{font-family:var(--font-sans);color:var(--color-text-primary)}
   <div class="panel-row">
     <div class="control-group">
       <span class="control-label">Тип кристалла</span>
-      <div class="seg" id="type-seg">
+      <div class="seg">
         <button class="seg-btn on" onclick="setType('t45',this)">Т4.5 — огромный</button>
         <button class="seg-btn" onclick="setType('t4',this)">Т4 — судьбы</button>
       </div>
     </div>
-
     <div class="control-group">
       <span class="control-label">Премиум Нинав</span>
       <div class="toggle-wrap" onclick="togglePremium()">
@@ -105,26 +130,25 @@ body{font-family:var(--font-sans);color:var(--color-text-primary)}
         </div>
       </div>
     </div>
-
     <div class="control-group">
       <span class="control-label">Цена 1 кристалла</span>
-      <div class="price-input-row">
+      <div style="display:flex;align-items:center;gap:8px">
         <input type="number" id="crystal-price" value="100" min="0" oninput="recalc()" class="price-big">
-        <label style="font-size:13px;color:var(--color-text-secondary)">золота</label>
+        <span style="font-size:13px;color:var(--d-muted)">золота</span>
       </div>
     </div>
-
     <div class="control-group">
       <span class="control-label">Активные перки</span>
       <div style="display:flex;flex-direction:column;gap:5px;margin-top:2px">
-        <div class="perk-pill"><div class="perk-dot"></div><span class="perk-text">+15% кристаллов</span></div>
-        <div class="perk-pill"><div class="perk-dot" style="background:#185FA5"></div><span class="perk-text" style="color:#0C447C">−5% комиссия</span></div>
+        <div class="perk-pill perk-green"><div class="perk-dot" style="background:#1D9E75"></div><span class="perk-text-g">+15% кристаллов</span></div>
+        <div class="perk-pill perk-blue"><div class="perk-dot" style="background:#378ADD"></div><span class="perk-text-b">−5% комиссия</span></div>
       </div>
     </div>
   </div>
 </div>
 
 <div class="crafts-grid" id="crafts-grid"></div>
+</div>
 </div>
 
 <script>
@@ -140,7 +164,7 @@ const CT={
   t45:{blue:43,green:59,white:112,fee:468},
   t4:{blue:33,green:45,white:86,fee:468},
 };
-let cType='t45', premium=false;
+let cType='t45',premium=false;
 const prices={};
 CRAFTS.forEach(c=>{prices[c.id]={blue:500,green:300,white:150}});
 
@@ -148,71 +172,61 @@ const fmt=n=>Math.round(n).toLocaleString('ru-RU');
 const fmtS=n=>(n>=0?'+':'')+fmt(n);
 const fmtD=n=>n.toFixed(1);
 
-function calc(id){
-  const p=prices[id], ct=CT[cType];
+function calcForCraft(id){
+  const p=prices[id],ct=CT[cType];
   const sp=parseFloat(document.getElementById('crystal-price').value)||0;
-  const pb=p.blue/100, pg=p.green/100, pw=p.white/100;
-  const resPer10=ct.blue*pb+ct.green*pg+ct.white*pw;
-  function forCrafts(n){
-    const res=resPer10*n;
-    const fee=ct.fee*n;
-    const total=res+fee;
+  const pb=p.blue/100,pg=p.green/100,pw=p.white/100;
+  const r10=ct.blue*pb+ct.green*pg+ct.white*pw;
+  function forN(n){
+    const res=r10*n,fee=ct.fee*n,total=res+fee;
     const crys=10*n*1.15;
-    const profit=crys*sp*0.95-total;
-    return{res,fee,total,crys,profit};
+    return{res,fee,total,crys,profit:crys*sp*0.95-total};
   }
-  const c30=forCrafts(30), c40=forCrafts(40);
-  const cur=premium?c40:c30;
-  const p1=sp*0.95-(cur.total/cur.crys);
-  return{cur,c30,c40,p1};
+  const c30=forN(30),c40=forN(40),cur=premium?c40:c30;
+  return{cur,c30,c40,p1:sp*0.95-(cur.total/cur.crys)};
 }
 
 function setType(t,btn){
   cType=t;
   document.querySelectorAll('.seg-btn').forEach(b=>b.classList.remove('on'));
-  btn.classList.add('on');
-  recalc();
+  btn.classList.add('on');recalc();
 }
 function togglePremium(){
   premium=!premium;
-  const tr=document.getElementById('prem-track');
-  const lb=document.getElementById('prem-label');
-  tr.classList.toggle('on',premium);
-  lb.textContent=premium?'Включён — 40 крафтов':'Выключен — 30 крафтов';
+  document.getElementById('prem-track').classList.toggle('on',premium);
+  document.getElementById('prem-label').textContent=premium?'Включён — 40 крафтов':'Выключен — 30 крафтов';
   recalc();
 }
-function sp(id,color,v){prices[id][color]=parseFloat(v)||0;recalc()}
+function setPrice(id,color,v){prices[id][color]=parseFloat(v)||0;recalc();}
 
 function buildUI(){
   const g=document.getElementById('crafts-grid');
   g.innerHTML='';
   CRAFTS.forEach(c=>{
     const d=document.createElement('div');
-    d.className='craft-card';
-    d.id='cc-'+c.id;
-    const ct=CT[cType];
+    d.className='craft-card';d.id='cc-'+c.id;
     d.innerHTML=`
 <div class="card-head">
   <div style="display:flex;align-items:center;gap:10px">
-    <div class="card-icon craft-icon-${c.ic}" style="font-size:16px">${c.icon}</div>
-    <span class="card-name" id="cn-${c.id}">${c.name}</span>
+    <div class="card-icon craft-icon-${c.ic}">${c.icon}</div>
+    <span class="card-name">${c.name}</span>
   </div>
   <span class="best-tag" id="bt-${c.id}" style="display:none">лучший</span>
 </div>
 <div class="res-inputs">
   <div class="res-line">
     <div class="res-chip"><div class="res-sq sq-b"></div><span class="res-name">Синий</span></div>
-    <input type="number" value="${prices[c.id].blue}" min="0" oninput="sp('${c.id}','blue',this.value)">
+    <input type="number" value="${prices[c.id].blue}" min="0" oninput="setPrice('${c.id}','blue',this.value)">
     <span class="res-qty" id="rq-${c.id}-b"></span>
   </div>
   <div class="res-line">
     <div class="res-chip"><div class="res-sq sq-g"></div><span class="res-name">Зелёный</span></div>
-    <input type="number" value="${prices[c.id].green}" min="0" oninput="sp('${c.id}','green',this.value)">
+    <input type="number" value="${prices[c.id].green}" min="0" oninput="setPrice('${c.id}','green',this.value)">
     <span class="res-qty" id="rq-${c.id}-g"></span>
   </div>
   <div class="res-line">
     <div class="res-chip"><div class="res-sq sq-w"></div><span class="res-name">Белый</span></div>
-    <input type="number" value="${prices[c.id].white}" min="0" oninput="sp('${c.id}','white',this.value)">
+    <input type="number" value="${prices[c.id].white}" min="0" oninput="setPrice('${c.id}','white',this.value)">
     <span class="res-qty" id="rq-${c.id}-w"></span>
   </div>
 </div>
@@ -227,36 +241,27 @@ function buildUI(){
 
 function recalc(){
   const ct=CT[cType];
-  const results=CRAFTS.map(c=>({id:c.id,...calc(c.id)}));
-  const bestProfit=Math.max(...results.map(r=>r.cur.profit));
-
-  results.forEach(r=>{
-    const isBest=Math.round(r.cur.profit)===Math.round(bestProfit);
-    const card=document.getElementById('cc-'+r.id);
-    card.className='craft-card'+(isBest?' best':'');
+  const res=CRAFTS.map(c=>({id:c.id,...calcForCraft(c.id)}));
+  const best=Math.max(...res.map(r=>r.cur.profit));
+  res.forEach(r=>{
+    const isBest=Math.round(r.cur.profit)===Math.round(best);
+    document.getElementById('cc-'+r.id).className='craft-card'+(isBest?' best':'');
     document.getElementById('bt-'+r.id).style.display=isBest?'':'none';
-
     const n=premium?40:30;
     document.getElementById('rq-'+r.id+'-b').textContent=`×${ct.blue}/10`;
     document.getElementById('rq-'+r.id+'-g').textContent=`×${ct.green}/10`;
     document.getElementById('rq-'+r.id+'-w').textContent=`×${ct.white}/10`;
-
     const cur=premium?r.c40:r.c30;
     document.getElementById('cm-'+r.id).innerHTML=`
 <div class="mini-box"><div class="mini-lbl">Ресурсы</div><div class="mini-val">${fmt(cur.res)} зол.</div></div>
 <div class="mini-box"><div class="mini-lbl">Крафт (${n}×468)</div><div class="mini-val">${fmt(cur.fee)} зол.</div></div>
 <div class="mini-box"><div class="mini-lbl">Всего затрат</div><div class="mini-val">${fmt(cur.total)} зол.</div></div>
 <div class="mini-box"><div class="mini-lbl">Кристаллов</div><div class="mini-val">${fmtD(cur.crys)} шт.</div></div>`;
-
-    const p1c=r.p1>=0?'pos':'neg';
-    const p30c=r.c30.profit>=0?'pos':'neg';
-    const p40c=r.c40.profit>=0?'pos':'neg';
     document.getElementById('pr-'+r.id).innerHTML=`
-<div class="profit-cell"><div class="p-head">За 1 кристалл</div><div class="p-val ${p1c}">${fmtS(r.p1)} зол.</div></div>
-<div class="profit-cell"><div class="p-head">30 крафтов</div><div class="p-val ${p30c}">${fmtS(r.c30.profit)} зол.</div></div>
-<div class="profit-cell"><div class="p-head">40 крафтов</div><div class="p-val ${p40c} ${r.c40.profit>=0?'pos-hi':''}">${fmtS(r.c40.profit)} зол.</div></div>`;
+<div class="profit-cell"><div class="p-head">За 1 кристалл</div><div class="p-val ${r.p1>=0?'pos':'neg'}">${fmtS(r.p1)} зол.</div></div>
+<div class="profit-cell"><div class="p-head">30 крафтов</div><div class="p-val ${r.c30.profit>=0?'pos':'neg'}">${fmtS(r.c30.profit)} зол.</div></div>
+<div class="profit-cell"><div class="p-head">40 крафтов</div><div class="p-val ${r.c40.profit>=0?'pos pos-hi':'neg'}">${fmtS(r.c40.profit)} зол.</div></div>`;
   });
 }
-
 buildUI();
 </script>
