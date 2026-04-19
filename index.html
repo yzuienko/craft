@@ -1,244 +1,401 @@
 
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-.wrap{padding:1rem 0;font-family:var(--font-sans)}
-h1{font-size:18px;font-weight:500;color:var(--color-text-primary);margin-bottom:1.5rem}
-.settings{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:1.5rem}
-.setting-card{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px 16px}
-.setting-label{font-size:13px;color:var(--color-text-secondary);margin-bottom:8px}
-.toggle-row{display:flex;gap:8px}
-.toggle-btn{flex:1;padding:6px;font-size:13px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);background:transparent;color:var(--color-text-secondary);cursor:pointer;transition:all .15s}
-.toggle-btn.active{background:var(--color-background-info);color:var(--color-text-info);border-color:var(--color-border-info)}
-.check-row{display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px;color:var(--color-text-primary)}
-.check-row input{width:15px;height:15px;cursor:pointer}
-.crafts-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:16px}
-.craft-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1.25rem;transition:border-color .2s}
-.craft-card.best{border:2px solid #1D9E75}
-.craft-name{font-size:15px;font-weight:500;color:var(--color-text-primary);margin-bottom:12px;display:flex;align-items:center;gap:8px}
-.best-badge{font-size:11px;background:#E1F5EE;color:#0F6E56;padding:2px 8px;border-radius:var(--border-radius-md)}
-.res-row{display:flex;align-items:center;gap:8px;margin-bottom:8px}
-.res-dot{width:14px;height:14px;border-radius:3px;flex-shrink:0}
-.dot-blue{background:#378ADD}
-.dot-green{background:#639922}
-.dot-gray{background:#888780}
-.res-label{font-size:13px;color:var(--color-text-secondary);width:100px;flex-shrink:0}
-.res-label span{font-size:11px;color:var(--color-text-tertiary)}
-.res-row input{width:90px;font-size:13px}
-.divider{border:none;border-top:0.5px solid var(--color-border-tertiary);margin:12px 0}
-.costs-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:8px}
-.cost-box{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:7px 8px}
-.cost-lbl{font-size:10px;color:var(--color-text-tertiary);margin-bottom:2px}
-.cost-val{font-size:12px;font-weight:500;color:var(--color-text-primary)}
-.profit-section{margin-top:8px}
-.profit-title{font-size:11px;color:var(--color-text-secondary);margin-bottom:6px;text-transform:uppercase;letter-spacing:.04em}
-.profit-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
-.profit-box{border-radius:var(--border-radius-md);padding:8px 10px;border:0.5px solid var(--color-border-tertiary)}
-.profit-lbl{font-size:10px;color:var(--color-text-secondary);margin-bottom:3px}
-.profit-val{font-size:13px;font-weight:500}
-.profit-val.pos{color:var(--color-text-success)}
-.profit-val.neg{color:var(--color-text-danger)}
+body{font-family:var(--font-sans)}
+:root{
+--d-bg:#16161400;--d-page:#18181600;
+--d-surface:#212120;--d-card:#252524;--d-card2:#2c2c2a;
+--d-border:rgba(255,255,255,0.07);--d-border-md:rgba(255,255,255,0.13);--d-border-hi:rgba(255,255,255,0.22);
+--d-text:#eae7e0;--d-muted:#8c8c87;--d-hint:#565652;
+--d-accent:#7F77DD;--d-accent-dim:#3a3380;--d-accent-glow:rgba(127,119,221,0.2);
+--d-green:#5DCAA5;--d-green-bg:rgba(29,158,117,0.13);--d-green-border:rgba(29,158,117,0.3);
+--d-amber:#EF9F27;--d-amber-bg:rgba(186,117,23,0.13);
+--d-red:#F09595;--d-red-bg:rgba(242,75,74,0.1);
+--d-blue:#85B7EB;--d-blue-bg:rgba(55,138,221,0.1);
+}
+.wrap{padding:1.5rem 0;background:var(--d-surface);min-height:100vh}
+.inner{max-width:1100px;margin:0 auto;padding:0 1.25rem}
+
+.header{display:flex;align-items:center;justify-content:space-between;margin-bottom:2rem;padding-bottom:1.25rem;border-bottom:0.5px solid var(--d-border)}
+.header-left{display:flex;align-items:baseline;gap:12px}
+.header-title{font-size:21px;font-weight:500;color:var(--d-text)}
+.header-sub{font-size:13px;color:var(--d-hint)}
+.saved-badge{font-size:11px;color:var(--d-hint);display:flex;align-items:center;gap:5px}
+.saved-dot{width:5px;height:5px;border-radius:50%;background:var(--d-green)}
+
+.panel{background:var(--d-card);border-radius:14px;padding:1.25rem 1.5rem;margin-bottom:1.5rem;border:0.5px solid var(--d-border)}
+.panel-row{display:flex;flex-wrap:wrap;gap:1.75rem;align-items:flex-start}
+.control-group{display:flex;flex-direction:column;gap:7px}
+.control-label{font-size:10px;font-weight:500;color:var(--d-hint);text-transform:uppercase;letter-spacing:.08em}
+
+.seg{display:flex;background:var(--d-surface);border:0.5px solid var(--d-border);border-radius:8px;overflow:hidden}
+.seg-btn{padding:7px 18px;font-size:13px;border:none;background:transparent;color:var(--d-muted);cursor:pointer;transition:all .15s;white-space:nowrap;font-family:var(--font-sans)}
+.seg-btn.on{background:var(--d-accent-dim);color:#CECBF6;font-weight:500}
+.seg-btn:not(.on):hover{background:rgba(255,255,255,0.05);color:var(--d-text)}
+
+.toggle-wrap{display:flex;align-items:center;gap:10px;cursor:pointer;user-select:none}
+.toggle-track{width:38px;height:21px;border-radius:11px;background:var(--d-border-md);transition:background .2s;flex-shrink:0;position:relative;border:0.5px solid var(--d-border)}
+.toggle-track.on{background:var(--d-accent);border-color:var(--d-accent)}
+.toggle-thumb{position:absolute;top:3px;left:3px;width:15px;height:15px;border-radius:50%;background:#fff;transition:left .2s;box-shadow:0 1px 3px rgba(0,0,0,0.4)}
+.toggle-track.on .toggle-thumb{left:20px}
+.toggle-label{font-size:13px;color:var(--d-text)}
+.toggle-sub{font-size:11px;color:var(--d-hint);margin-top:2px}
+
+input[type=number]{background:var(--d-surface);border:0.5px solid var(--d-border-md);border-radius:8px;padding:7px 11px;font-size:13px;color:var(--d-text);font-family:var(--font-sans);outline:none;transition:all .15s}
+input[type=number]:hover{border-color:var(--d-border-hi)}
+input[type=number]:focus{border-color:var(--d-accent);box-shadow:0 0 0 3px var(--d-accent-glow)}
+.price-big{width:115px;font-size:15px;font-weight:500}
+
+.perk-pill{display:inline-flex;align-items:center;gap:6px;border-radius:20px;padding:5px 11px;border:0.5px solid transparent}
+.perk-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0}
+
+.time-info{background:var(--d-card2);border:0.5px solid var(--d-border);border-radius:10px;padding:10px 14px;display:flex;gap:16px;flex-wrap:wrap}
+.time-stat{display:flex;flex-direction:column;gap:2px}
+.time-lbl{font-size:10px;color:var(--d-hint);text-transform:uppercase;letter-spacing:.06em}
+.time-val{font-size:13px;font-weight:500;color:var(--d-text)}
+.time-accent{color:var(--d-amber)}
+
+.crafts-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:16px}
+
+.craft-card{background:var(--d-card);border:0.5px solid var(--d-border);border-radius:14px;padding:1.25rem 1.4rem;transition:all .2s;position:relative;overflow:hidden}
+.craft-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:transparent;transition:background .2s;border-radius:14px 14px 0 0}
+.craft-card.best{border-color:var(--d-green-border)}
+.craft-card.best::before{background:linear-gradient(90deg,#1D9E75,#5DCAA5)}
+
+.card-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.1rem}
+.card-left{display:flex;align-items:center;gap:10px}
+.card-icon{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+.card-name{font-size:15px;font-weight:500;color:var(--d-text)}
+.best-tag{font-size:11px;font-weight:500;color:#5DCAA5;background:rgba(29,158,117,0.15);border:0.5px solid rgba(29,158,117,0.25);border-radius:20px;padding:3px 10px}
+
+.res-inputs{display:flex;flex-direction:column;gap:7px;margin-bottom:1.1rem}
+.res-line{display:flex;align-items:center;gap:9px}
+.res-chip{display:flex;align-items:center;gap:6px;width:85px;flex-shrink:0}
+.res-sq{width:11px;height:11px;border-radius:2px;flex-shrink:0}
+.sq-b{background:#378ADD}.sq-g{background:#639922}.sq-w{background:#888780}
+.res-name{font-size:12px;color:var(--d-muted)}
+.res-line input{flex:1;min-width:0;font-size:13px}
+.res-qty{font-size:11px;color:var(--d-hint);width:44px;text-align:right;white-space:nowrap}
+
+.divider{height:0.5px;background:var(--d-border);margin:1rem 0}
+
+.costs-mini{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px}
+.mini-box{background:var(--d-card2);border-radius:8px;padding:9px 11px;border:0.5px solid var(--d-border)}
+.mini-lbl{font-size:10px;color:var(--d-hint);margin-bottom:3px;text-transform:uppercase;letter-spacing:.04em}
+.mini-val{font-size:12px;font-weight:500;color:var(--d-text)}
+
+.section-label{font-size:10px;font-weight:500;color:var(--d-hint);text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px;margin-top:10px}
+
+.profit-row{display:grid;gap:6px}
+.profit-row.cols2{grid-template-columns:1fr 1fr}
+.profit-row.cols3{grid-template-columns:1fr 1fr 1fr}
+.profit-cell{border-radius:9px;padding:9px 11px;border:0.5px solid var(--d-border);background:var(--d-card2);transition:background .15s}
+.profit-cell.highlight{border-color:var(--d-green-border);background:var(--d-green-bg)}
+.p-head{font-size:10px;color:var(--d-hint);margin-bottom:3px}
+.p-val{font-size:13px;font-weight:500}
+.p-val.pos{color:var(--d-green)}.p-val.neg{color:var(--d-red)}
+
+.day-row{display:grid;gap:6px;margin-top:6px}
+.day-row.cols2{grid-template-columns:1fr 1fr}
+.day-cell{border-radius:9px;padding:9px 11px;border:0.5px solid var(--d-border);background:var(--d-card2)}
+.day-cell.prem{border-color:rgba(127,119,221,0.3);background:rgba(127,119,221,0.07)}
+
+.craft-icon-hunt{background:rgba(186,117,23,0.15);color:#EF9F27}
+.craft-icon-fish{background:rgba(55,138,221,0.15);color:#85B7EB}
+.craft-icon-arch{background:rgba(212,83,126,0.15);color:#ED93B1}
+.craft-icon-herb{background:rgba(99,153,34,0.15);color:#97C459}
+.craft-icon-wood{background:rgba(216,90,48,0.15);color:#F0997B}
+.craft-icon-mine{background:rgba(136,135,128,0.15);color:#B4B2A9}
 </style>
-<div class="wrap">
-  <h1>Калькулятор крафта кристаллов</h1>
-  <div class="settings">
-    <div class="setting-card">
-      <div class="setting-label">Тип крафта</div>
-      <div class="toggle-row">
-        <button class="toggle-btn active" id="btn-t45" onclick="setType('t45')">Т4.5 — огромный</button>
-        <button class="toggle-btn" id="btn-t4" onclick="setType('t4')">Т4 — судьбы</button>
+
+<div class="wrap"><div class="inner">
+
+<div class="header">
+  <div class="header-left">
+    <span class="header-title">Калькулятор крафта</span>
+    <span class="header-sub">Авидорские кристаллы</span>
+  </div>
+  <div class="saved-badge"><div class="saved-dot"></div><span id="save-status">данные сохранены локально</span></div>
+</div>
+
+<div class="panel">
+  <div class="panel-row">
+    <div class="control-group">
+      <span class="control-label">Тип кристалла</span>
+      <div class="seg">
+        <button class="seg-btn on" onclick="setType('t45',this)">Т4.5 — огромный</button>
+        <button class="seg-btn" onclick="setType('t4',this)">Т4 — судьбы</button>
       </div>
     </div>
-    <div class="setting-card">
-      <div class="setting-label">Режим крафтов</div>
-      <label class="check-row">
-        <input type="checkbox" id="premium" onchange="recalc()">
-        Премиум Нинав (40 крафтов вместо 30)
-      </label>
+    <div class="control-group">
+      <span class="control-label">Премиум Нинав</span>
+      <div class="toggle-wrap" onclick="togglePremium()">
+        <div class="toggle-track" id="prem-track"><div class="toggle-thumb"></div></div>
+        <div>
+          <div class="toggle-label" id="prem-label">Выключен</div>
+          <div class="toggle-sub">3 очереди → 30 крафтов за цикл</div>
+        </div>
+      </div>
     </div>
-    <div class="setting-card">
-      <div class="setting-label">Цена продажи 1 кристалла (золото)</div>
-      <input type="number" id="crystal-price" value="100" min="0" oninput="recalc()" style="width:120px;font-size:14px">
+    <div class="control-group">
+      <span class="control-label">Цена 1 кристалла</span>
+      <div style="display:flex;align-items:center;gap:8px">
+        <input type="number" id="crystal-price" value="100" min="0" oninput="setCrystalPrice(this.value)" class="price-big">
+        <span style="font-size:13px;color:var(--d-muted)">золота</span>
+      </div>
     </div>
-    <div class="setting-card">
-      <div class="setting-label">Перк (всегда активен)</div>
-      <div style="font-size:13px;color:var(--color-text-success)">✓ Идеальный результат: +15% кристаллов</div>
-      <div style="font-size:13px;color:var(--color-text-secondary);margin-top:4px">✓ Комиссия торговли: −5%</div>
+    <div class="control-group">
+      <span class="control-label">Активные перки</span>
+      <div style="display:flex;flex-direction:column;gap:5px;margin-top:1px">
+        <div class="perk-pill" style="background:var(--d-green-bg);border-color:var(--d-green-border)">
+          <div class="perk-dot" style="background:#1D9E75"></div>
+          <span style="font-size:12px;font-weight:500;color:var(--d-green)">+15% кристаллов</span>
+        </div>
+        <div class="perk-pill" style="background:var(--d-blue-bg);border-color:rgba(55,138,221,0.25)">
+          <div class="perk-dot" style="background:#378ADD"></div>
+          <span style="font-size:12px;font-weight:500;color:var(--d-blue)">−5% комиссия аукциона</span>
+        </div>
+      </div>
+    </div>
+    <div class="control-group">
+      <span class="control-label">Цикл крафта</span>
+      <div class="time-info">
+        <div class="time-stat"><div class="time-lbl">1 стак</div><div class="time-val time-accent">1ч 08м 15с</div></div>
+        <div class="time-stat"><div class="time-lbl">Цикл (×10 стаков)</div><div class="time-val">11ч 22м 30с</div></div>
+        <div class="time-stat"><div class="time-lbl">Циклов за 24ч</div><div class="time-val" id="cycles-count">2 цикла</div></div>
+      </div>
     </div>
   </div>
-  <div class="crafts-grid" id="crafts-grid"></div>
 </div>
-<script>
-// Конфиг ремёсел
-const CRAFTS = [
-  {id:'hunt',name:'Охота'},
-  {id:'fish',name:'Рыбалка'},
-  {id:'arch',name:'Археология'},
-  {id:'herb',name:'Травничество'},
-  {id:'wood',name:'Лесозаготовка'},
-  {id:'mine',name:'Горное дело'},
-];
 
-// Конфиг типов кристаллов
-// Ресурсы указаны на 10 кристаллов (1 крафт)
-const CRYSTAL_TYPES = {
-  t45:{blue:43,green:59,white:112,craftCost:468},
-  t4: {blue:33,green:45,white:86, craftCost:468},
+<div class="crafts-grid" id="crafts-grid"></div>
+</div></div>
+
+<script>
+/* ── CONFIG ── */
+const CRAFTS=[
+  {id:'hunt',name:'Охота',icon:'🏹',ic:'hunt'},
+  {id:'fish',name:'Рыбалка',icon:'🎣',ic:'fish'},
+  {id:'arch',name:'Археология',icon:'🏺',ic:'arch'},
+  {id:'herb',name:'Травничество',icon:'🌿',ic:'herb'},
+  {id:'wood',name:'Лесозаготовка',icon:'🪵',ic:'wood'},
+  {id:'mine',name:'Горное дело',icon:'⛏',ic:'mine'},
+];
+const CT={
+  t45:{blue:43,green:59,white:112,fee:468},
+  t4: {blue:33,green:45,white:86, fee:468},
 };
 
-// Количество крафтов (каждый крафт = 10 кристаллов)
-const CRAFTS_COUNT = {normal:30, premium:40};
+/* Время одного стака в секундах: 1ч 8м 15с = 4095с
+   Цикл = 10 стаков параллельно (очереди одновременно) = 4095с
+   Циклов за 24ч = floor(86400 / 4095) = 21... нет:
+   Один ПОЛНЫЙ цикл (все стаки по очереди в одной очереди):
+   1 очередь делает 10 крафтов = 10 * 4095 = 40950с
+   Все 3 (или 4) очереди параллельны → время цикла = 40950с
+   Циклов за 86400с = floor(86400/40950) = 2 */
+const STACK_SEC = 4095;       // 1ч 8м 15с
+const CYCLE_SEC = STACK_SEC * 10; // одна очередь делает 10 крафтов
+const DAY_SEC   = 86400;
+const CYCLES_PER_DAY = Math.floor(DAY_SEC / CYCLE_SEC); // = 2
 
-let currentType = 't45';
-const prices = {};
+/* ── STATE (всё в переменных, не читаем из DOM при расчёте) ── */
+let cType='t45', premium=false, crystalPrice=100;
+const prices={};
 CRAFTS.forEach(c=>{prices[c.id]={blue:500,green:300,white:150}});
 
-function fmt(n){return Math.round(n).toLocaleString('ru-RU')}
-function fmtSign(n){return (n>=0?'+':'')+fmt(n)}
-
-function calcCraft(craftId){
-  const p = prices[craftId];
-  const ct = CRYSTAL_TYPES[currentType];
-  const crystalSellPrice = parseFloat(document.getElementById('crystal-price').value)||0;
-  const premium = document.getElementById('premium').checked;
-  const totalCrafts = premium ? CRAFTS_COUNT.premium : CRAFTS_COUNT.normal; // 30 или 40
-
-  // Цена ресурса за 1 шт (вводят за 100)
-  const pb = p.blue/100, pg = p.green/100, pw = p.white/100;
-
-  // Стоимость ресурсов за 1 крафт (на 10 кристаллов)
-  const resCostPer10 = ct.blue*pb + ct.green*pg + ct.white*pw;
-
-  // Стоимость ресурсов за всё количество крафтов
-  const resTotalCost = resCostPer10 * totalCrafts;
-
-  // Стоимость самого крафта: 468 × количество_крафтов
-  const craftFeeCost = ct.craftCost * totalCrafts; // напр. 468×30=14040 или 468×40=18720
-
-  // Общие затраты
-  const totalCost = resTotalCost + craftFeeCost;
-
-  // Количество кристаллов: 10 шт за крафт × количество крафтов × 1.15 (перк)
-  const totalCrystals = 10 * totalCrafts * 1.15;
-
-  // Доход до комиссии
-  const revenue = crystalSellPrice * totalCrystals;
-
-  // Чистая прибыль: доход × 0.95 (−5% комиссия) − затраты
-  const profitTotal = revenue * 0.95 - totalCost;
-
-  // Прибыль за 1 кристалл
-  // затраты на 1 кристалл = totalCost / totalCrystals
-  // доход от 1 кристалла = crystalSellPrice * 0.95
-  const profitPer1 = crystalSellPrice * 0.95 - (totalCost / totalCrystals);
-
-  // Прибыль за 30 крафтов (нормал)
-  const crafts30 = CRAFTS_COUNT.normal;
-  const resCost30 = resCostPer10 * crafts30;
-  const craftFee30 = ct.craftCost * crafts30;
-  const crystals30 = 10 * crafts30 * 1.15;
-  const profit30 = crystals30 * crystalSellPrice * 0.95 - (resCost30 + craftFee30);
-
-  // Прибыль за 40 крафтов (премиум)
-  const crafts40 = CRAFTS_COUNT.premium;
-  const resCost40 = resCostPer10 * crafts40;
-  const craftFee40 = ct.craftCost * crafts40;
-  const crystals40 = 10 * crafts40 * 1.15;
-  const profit40 = crystals40 * crystalSellPrice * 0.95 - (resCost40 + craftFee40);
-
-  return {
-    resTotalCost, craftFeeCost, totalCost,
-    totalCrystals, revenue, profitTotal,
-    profitPer1, profit30, profit40
-  };
+/* ── LOCALSTORAGE ── */
+function saveState(){
+  try{
+    localStorage.setItem('ccalc_v1',JSON.stringify({cType,premium,crystalPrice,prices}));
+  }catch(e){}
+}
+function loadState(){
+  try{
+    const raw=localStorage.getItem('ccalc_v1');
+    if(!raw)return;
+    const s=JSON.parse(raw);
+    if(s.cType)cType=s.cType;
+    if(typeof s.premium==='boolean')premium=s.premium;
+    if(typeof s.crystalPrice==='number')crystalPrice=s.crystalPrice;
+    if(s.prices)CRAFTS.forEach(c=>{if(s.prices[c.id])prices[c.id]=s.prices[c.id];});
+  }catch(e){}
 }
 
-function setType(t){
-  currentType = t;
-  document.getElementById('btn-t45').classList.toggle('active',t==='t45');
-  document.getElementById('btn-t4').classList.toggle('active',t==='t4');
-  recalc();
+/* ── HELPERS ── */
+const fmt=n=>Math.round(n).toLocaleString('ru-RU');
+const fmtS=n=>(n>=0?'+':'')+fmt(n);
+const fmtD=n=>n.toFixed(1);
+
+/* ── CALC ──
+   1. цена за 1шт = цена_за_100 / 100
+   2. ресурсы на 1 крафт (10 кристаллов) = blue*pb + green*pg + white*pw
+   3. N крафтов: ресурсы = r10*N, сбор = fee*N, итого = ресурсы+сбор
+   4. кристаллов = 10 * N * 1.15  (перк +15%)
+   5. доход_чистый = кристаллов * цена * 0.95  (−5% комиссия аукциона)
+   6. прибыль = доход_чистый − итого_затрат
+   7. прибыль за 1 кристалл = цена*0.95 − (итого / кристаллов)
+   8. доход за 24ч = прибыль_за_цикл * CYCLES_PER_DAY
+      где крафтов_за_цикл = очередей * 10 (стаков на очередь)
+      без премиума: 3*10=30, с премиумом: 4*10=40 ← это и есть наши N
+*/
+function calcForCraft(id){
+  const p=prices[id], ct=CT[cType];
+  const pb=p.blue/100, pg=p.green/100, pw=p.white/100;
+  const r10=ct.blue*pb + ct.green*pg + ct.white*pw;
+
+  function forN(n){
+    const res=r10*n, fee=ct.fee*n, total=res+fee;
+    const crys=10*n*1.15;
+    // доход после −5% комиссии аукциона
+    const revenue=crys*crystalPrice*0.95;
+    const profit=revenue-total;
+    return{res,fee,total,crys,revenue,profit};
+  }
+
+  const c30=forN(30), c40=forN(40);
+  const cur=premium?c40:c30;
+  // прибыль за 1 кристалл: продаём за цену*0.95, вычитаем себестоимость
+  const p1=crystalPrice*0.95-(cur.total/cur.crys);
+  // за 24ч: за 1 цикл получаем c30.profit (без прем) или c40.profit (с прем)
+  const day30=c30.profit*CYCLES_PER_DAY;
+  const day40=c40.profit*CYCLES_PER_DAY;
+
+  return{cur,c30,c40,p1,day30,day40};
 }
 
-function setPrice(id,color,val){
-  prices[id][color]=parseFloat(val)||0;
-  recalc();
+/* ── CONTROLS ── */
+function setType(t,btn){
+  cType=t;
+  document.querySelectorAll('.seg-btn').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  saveState(); recalc();
+}
+function togglePremium(){
+  premium=!premium;
+  document.getElementById('prem-track').classList.toggle('on',premium);
+  document.getElementById('prem-label').textContent=premium?'Включён':'Выключен';
+  document.querySelector('.toggle-sub').textContent=premium
+    ?'4 очереди → 40 крафтов за цикл'
+    :'3 очереди → 30 крафтов за цикл';
+  saveState(); recalc();
+}
+function setCrystalPrice(v){
+  crystalPrice=parseFloat(v)||0;
+  saveState(); recalc();
+}
+function setPrice(id,color,v){
+  prices[id][color]=parseFloat(v)||0;
+  saveState(); recalc();
 }
 
+/* ── BUILD UI ── */
 function buildUI(){
-  const grid = document.getElementById('crafts-grid');
-  grid.innerHTML='';
+  loadState();
+
+  // Применяем загруженный стейт к контролам
+  document.getElementById('crystal-price').value=crystalPrice;
+  document.getElementById('prem-track').classList.toggle('on',premium);
+  document.getElementById('prem-label').textContent=premium?'Включён':'Выключен';
+  document.querySelector('.toggle-sub').textContent=premium
+    ?'4 очереди → 40 крафтов за цикл'
+    :'3 очереди → 30 крафтов за цикл';
+  if(cType==='t4'){
+    document.querySelectorAll('.seg-btn')[0].classList.remove('on');
+    document.querySelectorAll('.seg-btn')[1].classList.add('on');
+  }
+  document.getElementById('cycles-count').textContent=`${CYCLES_PER_DAY} цикла`;
+
+  const g=document.getElementById('crafts-grid');
+  g.innerHTML='';
   CRAFTS.forEach(c=>{
-    const div=document.createElement('div');
-    div.className='craft-card';
-    div.id='card-'+c.id;
-    div.innerHTML=`
-      <div class="craft-name" id="name-${c.id}">${c.name}</div>
-      <div class="res-row">
-        <div class="res-dot dot-blue"></div>
-        <span class="res-label">Синий <span>(за 100)</span></span>
-        <input type="number" id="p-${c.id}-blue" value="${prices[c.id].blue}" min="0" oninput="setPrice('${c.id}','blue',this.value)">
-      </div>
-      <div class="res-row">
-        <div class="res-dot dot-green"></div>
-        <span class="res-label">Зелёный <span>(за 100)</span></span>
-        <input type="number" id="p-${c.id}-green" value="${prices[c.id].green}" min="0" oninput="setPrice('${c.id}','green',this.value)">
-      </div>
-      <div class="res-row">
-        <div class="res-dot dot-gray"></div>
-        <span class="res-label">Белый <span>(за 100)</span></span>
-        <input type="number" id="p-${c.id}-white" value="${prices[c.id].white}" min="0" oninput="setPrice('${c.id}','white',this.value)">
-      </div>
-      <hr class="divider">
-      <div id="stats-${c.id}"></div>
-    `;
-    grid.appendChild(div);
+    const d=document.createElement('div');
+    d.className='craft-card'; d.id='cc-'+c.id;
+    d.innerHTML=`
+<div class="card-head">
+  <div class="card-left">
+    <div class="card-icon craft-icon-${c.ic}">${c.icon}</div>
+    <span class="card-name">${c.name}</span>
+  </div>
+  <span class="best-tag" id="bt-${c.id}" style="display:none">лучший</span>
+</div>
+<div class="res-inputs">
+  <div class="res-line">
+    <div class="res-chip"><div class="res-sq sq-b"></div><span class="res-name">Синий</span></div>
+    <input type="number" value="${prices[c.id].blue}" min="0" oninput="setPrice('${c.id}','blue',this.value)">
+    <span class="res-qty" id="rq-${c.id}-b"></span>
+  </div>
+  <div class="res-line">
+    <div class="res-chip"><div class="res-sq sq-g"></div><span class="res-name">Зелёный</span></div>
+    <input type="number" value="${prices[c.id].green}" min="0" oninput="setPrice('${c.id}','green',this.value)">
+    <span class="res-qty" id="rq-${c.id}-g"></span>
+  </div>
+  <div class="res-line">
+    <div class="res-chip"><div class="res-sq sq-w"></div><span class="res-name">Белый</span></div>
+    <input type="number" value="${prices[c.id].white}" min="0" oninput="setPrice('${c.id}','white',this.value)">
+    <span class="res-qty" id="rq-${c.id}-w"></span>
+  </div>
+</div>
+<div class="divider"></div>
+<div class="costs-mini" id="cm-${c.id}"></div>
+<div class="section-label">Чистая прибыль за цикл</div>
+<div class="profit-row" id="pr-${c.id}"></div>
+<div class="section-label">Прибыль за 24 часа (${CYCLES_PER_DAY} цикла)</div>
+<div class="day-row" id="dr-${c.id}"></div>`;
+    g.appendChild(d);
   });
   recalc();
 }
 
+/* ── RECALC ── */
 function recalc(){
-  const results=CRAFTS.map(c=>({id:c.id,...calcCraft(c.id)}));
-  const maxProfit=Math.max(...results.map(r=>r.profitTotal));
+  const ct=CT[cType];
+  const results=CRAFTS.map(c=>({id:c.id,...calcForCraft(c.id)}));
+  const best=Math.max(...results.map(r=>r.cur.profit));
 
   results.forEach(r=>{
-    const isBest=r.profitTotal===maxProfit;
-    const card=document.getElementById('card-'+r.id);
-    card.className='craft-card'+(isBest?' best':'');
-    const craft=CRAFTS.find(c=>c.id===r.id);
-    document.getElementById('name-'+r.id).innerHTML=
-      craft.name+(isBest?' <span class="best-badge">лучший</span>':'');
+    const isBest=Math.round(r.cur.profit)===Math.round(best);
+    document.getElementById('cc-'+r.id).className='craft-card'+(isBest?' best':'');
+    document.getElementById('bt-'+r.id).style.display=isBest?'':'none';
 
-    const premium=document.getElementById('premium').checked;
-    const totalCrafts=premium?40:30;
-    const pc=r.profitPer1, p30=r.profit30, p40=r.profit40;
+    const ct2=CT[cType];
+    document.getElementById('rq-'+r.id+'-b').textContent=`×${ct2.blue}`;
+    document.getElementById('rq-'+r.id+'-g').textContent=`×${ct2.green}`;
+    document.getElementById('rq-'+r.id+'-w').textContent=`×${ct2.white}`;
 
-    document.getElementById('stats-'+r.id).innerHTML=`
-      <div class="costs-row">
-        <div class="cost-box"><div class="cost-lbl">Ресурсы</div><div class="cost-val">${fmt(r.resTotalCost)} зол.</div></div>
-        <div class="cost-box"><div class="cost-lbl">Крафт (${totalCrafts}×468)</div><div class="cost-val">${fmt(r.craftFeeCost)} зол.</div></div>
-        <div class="cost-box"><div class="cost-lbl">Итого затрат</div><div class="cost-val">${fmt(r.totalCost)} зол.</div></div>
-      </div>
-      <div class="cost-box" style="margin-bottom:8px">
-        <div class="cost-lbl">Кристаллов получено (×1.15 перк): ${r.totalCrystals.toFixed(1)} шт. → Доход: ${fmt(r.revenue)} зол.</div>
-      </div>
-      <div class="profit-section">
-        <div class="profit-title">Чистая прибыль (−5% комиссия)</div>
-        <div class="profit-grid">
-          <div class="profit-box">
-            <div class="profit-lbl">За 1 кристалл</div>
-            <div class="profit-val ${pc>=0?'pos':'neg'}">${fmtSign(pc)} зол.</div>
-          </div>
-          <div class="profit-box">
-            <div class="profit-lbl">За 30 крафтов</div>
-            <div class="profit-val ${p30>=0?'pos':'neg'}">${fmtSign(p30)} зол.</div>
-          </div>
-          <div class="profit-box">
-            <div class="profit-lbl">За 40 крафтов</div>
-            <div class="profit-val ${p40>=0?'pos':'neg'}">${fmtSign(p40)} зол.</div>
-          </div>
-        </div>
-      </div>
-    `;
+    const n=premium?40:30;
+    const cur=premium?r.c40:r.c30;
+    document.getElementById('cm-'+r.id).innerHTML=`
+<div class="mini-box"><div class="mini-lbl">Ресурсы (${n} крафтов)</div><div class="mini-val">${fmt(cur.res)} зол.</div></div>
+<div class="mini-box"><div class="mini-lbl">Крафт-сбор (${n}×468)</div><div class="mini-val">${fmt(cur.fee)} зол.</div></div>
+<div class="mini-box"><div class="mini-lbl">Итого затрат</div><div class="mini-val">${fmt(cur.total)} зол.</div></div>
+<div class="mini-box"><div class="mini-lbl">Кристаллов ×1.15</div><div class="mini-val">${fmtD(cur.crys)} шт.</div></div>`;
+
+    // Блок прибыли за цикл
+    // p1 всегда, 30 всегда, 40 только если премиум включён
+    if(premium){
+      document.getElementById('pr-'+r.id).className='profit-row cols3';
+      document.getElementById('pr-'+r.id).innerHTML=`
+<div class="profit-cell"><div class="p-head">За 1 кристалл</div><div class="p-val ${r.p1>=0?'pos':'neg'}">${fmtS(r.p1)} зол.</div></div>
+<div class="profit-cell"><div class="p-head">30 крафтов</div><div class="p-val ${r.c30.profit>=0?'pos':'neg'}">${fmtS(r.c30.profit)} зол.</div></div>
+<div class="profit-cell highlight"><div class="p-head">С Нинав (40 крафтов)</div><div class="p-val ${r.c40.profit>=0?'pos':'neg'}">${fmtS(r.c40.profit)} зол.</div></div>`;
+    } else {
+      document.getElementById('pr-'+r.id).className='profit-row cols2';
+      document.getElementById('pr-'+r.id).innerHTML=`
+<div class="profit-cell"><div class="p-head">За 1 кристалл</div><div class="p-val ${r.p1>=0?'pos':'neg'}">${fmtS(r.p1)} зол.</div></div>
+<div class="profit-cell"><div class="p-head">30 крафтов (за цикл)</div><div class="p-val ${r.c30.profit>=0?'pos':'neg'}">${fmtS(r.c30.profit)} зол.</div></div>`;
+    }
+
+    // Блок прибыли за 24ч
+    if(premium){
+      document.getElementById('dr-'+r.id).className='day-row cols2';
+      document.getElementById('dr-'+r.id).innerHTML=`
+<div class="day-cell"><div class="p-head">Без Нинав (30 кр. × ${CYCLES_PER_DAY})</div><div class="p-val ${r.day30>=0?'pos':'neg'}">${fmtS(r.day30)} зол.</div></div>
+<div class="day-cell prem"><div class="p-head">С Нинав (40 кр. × ${CYCLES_PER_DAY})</div><div class="p-val ${r.day40>=0?'pos':'neg'}">${fmtS(r.day40)} зол.</div></div>`;
+    } else {
+      document.getElementById('dr-'+r.id).className='day-row';
+      document.getElementById('dr-'+r.id).innerHTML=`
+<div class="day-cell"><div class="p-head">Без Нинав (30 крафтов × ${CYCLES_PER_DAY} цикла)</div><div class="p-val ${r.day30>=0?'pos':'neg'}">${fmtS(r.day30)} зол.</div></div>`;
+    }
   });
 }
 
